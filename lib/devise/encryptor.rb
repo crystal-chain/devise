@@ -12,6 +12,7 @@ module Devise
     end
 
     def self.compare(klass, hashed_password, password)
+    require "pry"; binding.pry
       return false if hashed_password.blank?
       bcrypt   = ::BCrypt::Password.new(hashed_password)
       if klass.pepper.present?
