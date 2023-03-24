@@ -144,6 +144,10 @@ module Devise
   mattr_accessor :confirmation_keys
   @@confirmation_keys = [:email]
 
+  # Allows to configure a custom encryptor
+  mattr_accessor :encryptor
+  @@encryptor = Devise::Encryptor::BCrypt
+
   # Defines if email should be reconfirmable.
   mattr_accessor :reconfirmable
   @@reconfirmable = true
