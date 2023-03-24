@@ -11,6 +11,7 @@ require 'responders'
 module Devise
   autoload :Delegator,          'devise/delegator'
   autoload :Encryptor,          'devise/encryptor'
+  autoload :BCryptEncryptor,    'devise/encryptor/bcrypt_encryptor'
   autoload :FailureApp,         'devise/failure_app'
   autoload :OmniAuth,           'devise/omniauth'
   autoload :ParameterFilter,    'devise/parameter_filter'
@@ -146,7 +147,7 @@ module Devise
 
   # Allows to configure a custom encryptor
   mattr_accessor :encryptor
-  @@encryptor = Devise::Encryptor::BCrypt
+  @@encryptor = :bcrypt
 
   # Defines if email should be reconfirmable.
   mattr_accessor :reconfirmable

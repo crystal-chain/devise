@@ -8,17 +8,13 @@ module Devise
       if klass.pepper.present?
         password = "#{password}#{klass.pepper}"
       end
-      ::BCrypt::Password.create(password, cost: klass.stretches).to_s
+      BCryptEncryptor.create_password(password, cost: klass.stretches)
     end
 
     def self.compare(klass, hashed_password, password)
-    require "pry"; binding.pry
       return false if hashed_password.blank?
-      bcrypt   = ::BCrypt::Password.new(hashed_password)
-      if klass.pepper.present?
-        password = "#{password}#{klass.pepper}"
-      end
-      password = ::BCrypt::Engine.hash_secret(password, bcrypt.salt)
+
+      password = BCryptEncryptor.compare_password("#{password}#{klass.pepper}", hashed_password)
       Devise.secure_compare(password, hashed_password)
     end
   end
