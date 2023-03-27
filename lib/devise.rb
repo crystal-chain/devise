@@ -62,6 +62,9 @@ module Devise
   # True values used to check params
   TRUE_VALUES = [true, 1, '1', 't', 'T', 'true', 'TRUE']
 
+  mattr_accessor :argon2_m_cost
+  @@argon2_m_cost = 20
+
   # Secret key used by the key generator
   mattr_accessor :secret_key
   @@secret_key = nil

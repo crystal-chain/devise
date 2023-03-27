@@ -6,7 +6,7 @@ module Devise
   module Encryptor 
     extend self
     def digest(klass, password)
-      Rails.logger.info('ARGON2 Password Creation')
+      Rails.logger.info("ARGON2 Password Creation m_cost: #{m_cost}, p_cost: #{p_cost}, t_cost: #{t_cost}")
       hasher = Argon2::Password.new(m_cost:, p_cost:, secret:, t_cost:)
       hasher.create(password)
     end
@@ -23,7 +23,7 @@ module Devise
     private
 
     def m_cost
-      @__m_cost__ ||= Rails.application.secrets.argon2_m_cost || 20
+      @__m_cost__ ||= Devise.argon2_m_cost
     end
 
     def p_cost
@@ -31,7 +31,7 @@ module Devise
     end
 
     def secret
-      @__secret__ ||= Rails.application.secrets.argon2_secret || '4gcnu3X1Kmuz5p8woCeeRSVr6NJFHAwFoEHqfQWeRA8' 
+      @__secret__ ||= Devise.secret_key
     end
 
     def t_cost
