@@ -13,6 +13,7 @@ module Devise
 
     def compare(klass, hashed_password, password)
       Rails.logger.info('ARGON2 Password Verification')
+      require "pry"; binding.pry
       Argon2::Password.verify_password(
         "#{password}#{klass.pepper}",
         hashed_password,
