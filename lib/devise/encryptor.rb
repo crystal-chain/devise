@@ -12,13 +12,25 @@ module Devise
     end
 
     def compare(klass, hashed_password, password)
+      return false if hashed_password.blank?
+
       Rails.logger.info('ARGON2 Password Verification')
-      require "pry"; binding.pry
-      Argon2::Password.verify_password(
-        "#{password}#{klass.pepper}",
-        hashed_password,
-        secret
-      )
+      if hashed_password.starts_with?('$argon2')
+        Argon2::Password.verify_password(
+          "#{password}#{klass.pepper}",
+          hashed_password,
+          secret
+        )
+      else
+        password = "#{password}#{klass.pepper}"
+        bcrypt   = ::BCrypt::Password.new(hashed_password)
+        password = ::BCrypt::Engine.hash_secret(password, bcrypt.salt)
+        Devise.secure_compare(password, hashed_password).tap do
+          user = User.find_by(encrypted_password: hashed_password)
+          Rails.logger.info("BCRYPT Password Invalidation of user #{user.email}")
+          user.update(force_password_updating: true)
+        end
+      end
     end
 
     private
